@@ -41,7 +41,6 @@ func CcStartService(serverAddr *net.TCPAddr, localConn *net.TCPConn, thisName, t
 }
 
 func ccNewP2pConnect(serverAddr *net.TCPAddr, thisName, targetName, remoteIp string, remotePort, makeHoleTime int) (int, net.Addr, net.Addr, net.Addr, []byte, []byte, error) {
-	log.Info("new p2p ->", targetName, remoteIp, remotePort)
 	// 创建新连接
 	serverConn, err := net.DialTCP("tcp", nil, serverAddr)
 	if err != nil {
