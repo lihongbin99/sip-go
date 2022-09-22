@@ -1,0 +1,11 @@
+{
+  "listen": {
+    "ip": "",
+    "port": 13520
+  },
+  "log_level": "trace",
+  "interval": 180000,
+  "security": {
+    "private_key": "config/security/private.pem"
+  }
+}

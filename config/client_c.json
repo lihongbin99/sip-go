@@ -1,0 +1,28 @@
+{
+  "client_name": "cc",
+  "server": {
+    "ip": "0.0.0.0",
+    "port": 13520
+  },
+  "log_level": "trace",
+  "security": {
+    "public_key": "config/security/public.pem"
+  },
+  "proxy": [
+    {
+      "client_name": "cs",
+      "local_port": 29091,
+      "remote_ip": "0.0.0.0",
+      "remote_port": 28080
+    }
+  ],
+  "p2p": [
+    {
+      "client_name": "cs",
+      "local_port": 29092,
+      "remote_ip": "0.0.0.0",
+      "remote_port": 28080,
+      "make_hole_time": 1000
+    }
+  ]
+}
