@@ -17,8 +17,11 @@ func p2p(local2ServerAddr, remoteAddr net.Addr) (net.Conn, error) {
 	return remoteConn, nil
 }
 
-func p2pTransferData(localConn *net.TCPConn, p2pTCP *io.TCP) {
+func p2pTransferData(localConn *net.TCPConn, p2pTCP *io.TCP) (string, string) {
 	stopChan := make(chan uint8, 0)
+
+	var uploadByte uint64 = 0
+	var downloadByte uint64 = 0
 
 	go func() {
 		defer func() {
@@ -34,6 +37,7 @@ func p2pTransferData(localConn *net.TCPConn, p2pTCP *io.TCP) {
 				if err = p2pTCP.WriteMessage(&msg.DataMessage{Data: buf[:readLen]}); err != nil {
 					return
 				}
+				uploadByte += uint64(readLen)
 			}
 		}
 	}()
@@ -58,6 +62,7 @@ func p2pTransferData(localConn *net.TCPConn, p2pTCP *io.TCP) {
 				if _, err := localConn.Write(m.Data); err != nil {
 					return
 				}
+				downloadByte += uint64(len(m.Data))
 			default:
 				log.Error("p2p transfer type error:", message.Message.GetMessageType())
 				return
@@ -67,4 +72,21 @@ func p2pTransferData(localConn *net.TCPConn, p2pTCP *io.TCP) {
 
 	_ = <-stopChan
 	_ = <-stopChan
+
+	return byteToUnit(uploadByte), byteToUnit(downloadByte)
+}
+
+var (
+	unit = []string{"B", "KB", "MB", "GB", "TB", "PB", "EB"}
+)
+
+func byteToUnit(n uint64) string {
+	num := float64(n)
+	numUnit := unit[0]
+
+	for i := 1; num >= 1024; i, num = i+1, num/1024 {
+		numUnit = unit[i]
+	}
+
+	return fmt.Sprintf("%f%s", num, numUnit)
 }

@@ -46,10 +46,10 @@ func CsStartService(baseTCP *io.TCP, serverAddr *net.TCPAddr, p2pCsRequest *msg.
 
 	// 传输数据
 	p2pTCP := io.NewTCPByKey(p2pConn, key, iv)
-	p2pTransferData(localConn, p2pTCP)
+	upload, download := p2pTransferData(localConn, p2pTCP)
 
 	log.Info(id, "p2p finish:", p2pCsRequest.CcName, remoteAddr, "->",
-		p2pCsRequest.TargetIp, p2pCsRequest.TargetPort)
+		p2pCsRequest.TargetIp, p2pCsRequest.TargetPort, "upload", upload, "download", download)
 }
 
 func csNewP2pConnect(serverAddr *net.TCPAddr, p2pCsRequest *msg.P2pCsRequest) (int, *net.TCPConn, net.Addr, net.Addr, []byte, []byte, error) {

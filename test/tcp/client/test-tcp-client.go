@@ -51,7 +51,7 @@ func test(over chan interface{}) {
 
 	maxWrite := 0
 	c := true
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(3 * time.Second)
 	for c {
 		select {
 		case _ = <-ticker.C:

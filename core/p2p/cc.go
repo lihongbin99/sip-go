@@ -34,10 +34,10 @@ func CcStartService(serverAddr *net.TCPAddr, localConn *net.TCPConn, thisName, t
 
 	// 传输数据
 	p2pTCP := io.NewTCPByKey(p2pConn, key, iv)
-	p2pTransferData(localConn, p2pTCP)
+	upload, download := p2pTransferData(localConn, p2pTCP)
 
 	log.Info(id, "p2p finish:", myRemoteAddr, "->",
-		targetName, remoteAddr, "[", remoteIp, remotePort, "]")
+		targetName, remoteAddr, "[", remoteIp, remotePort, "]", "upload", upload, "download", download)
 }
 
 func ccNewP2pConnect(serverAddr *net.TCPAddr, thisName, targetName, remoteIp string, remotePort, makeHoleTime int) (int, net.Addr, net.Addr, net.Addr, []byte, []byte, error) {
