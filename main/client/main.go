@@ -79,9 +79,8 @@ func newConn(serverTCP *io.TCP) {
 	log.Info(serverTCP.Id, "client register success:", config.ClientConfig.ClientName)
 
 	// 处理读取请求
-	readChan := make(chan io.Message, 8)
+	readChan := make(chan io.Message, 0)
 	go func(tcp *io.TCP, readChan chan io.Message) {
-		defer close(readChan)
 		for {
 			message := tcp.ReadMessage(time.Time{})
 			readChan <- message
@@ -120,6 +119,16 @@ func newConn(serverTCP *io.TCP) {
 			}
 		}
 	}
+
+	cleanChan := true
+	for cleanChan {
+		select {
+		case _ = <-readChan:
+		default:
+			cleanChan = false
+		}
+	}
+	close(readChan)
 
 	log.Info(serverTCP.Id, "client,", config.ClientConfig.ClientName, "exit:", err)
 }
